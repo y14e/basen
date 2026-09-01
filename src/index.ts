@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -80,6 +80,11 @@ function generateBaseNHash(
 }
 
 function generateBaseNRandom(chars: string, length = 8): string {
+  if (length < 1 || length > 64) {
+    console.warn('Invalid length. Fallback: 8.');
+    length = 8;
+  }
+
   let result = '';
   const randoms = crypto.getRandomValues(new Uint8Array(length));
   const base = chars.length;
