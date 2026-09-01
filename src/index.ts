@@ -62,7 +62,7 @@ function generateBaseNHash(
     data = '';
   }
 
-  if (length < 1 || length > 64) {
+  if (Number.isNaN(length) || length < 1 || length > 64) {
     console.warn('Invalid length. Fallback: 8.');
     length = 8;
   }
@@ -80,7 +80,7 @@ function generateBaseNHash(
 }
 
 function generateBaseNRandom(chars: string, length: number): string {
-  if (length < 1 || length > 64) {
+  if (Number.isNaN(length) || length < 1 || length > 64) {
     console.warn('Invalid length. Fallback: 8.');
     length = 8;
   }
