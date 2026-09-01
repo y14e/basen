@@ -85,7 +85,7 @@ function generateBaseNRandom(chars: string, length = 8): string {
   const base = chars.length;
 
   for (let i = 0; i < length; i++) {
-    result += chars[randoms[i] % base];
+    result += chars[(randoms[i] ?? 0) % base];
   }
 
   return result;
