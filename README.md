@@ -1,3 +1,3 @@
-# basen.ts
+# BaseN
 
-TS snippet for generating a BaseN.
+For internal use.
