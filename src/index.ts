@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.1
+ * @version 1.0.2
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -55,7 +55,7 @@ export function generateBase62Random(length = 8): string {
 function generateBaseNHash(
   chars: string,
   data: string | Buffer,
-  length = 8,
+  length: number,
 ): string {
   if (typeof data !== 'string' && !Buffer.isBuffer(data)) {
     console.warn('Invalid data. Fallback: empty string.');
@@ -79,7 +79,7 @@ function generateBaseNHash(
   return result;
 }
 
-function generateBaseNRandom(chars: string, length = 8): string {
+function generateBaseNRandom(chars: string, length: number): string {
   if (length < 1 || length > 64) {
     console.warn('Invalid length. Fallback: 8.');
     length = 8;
