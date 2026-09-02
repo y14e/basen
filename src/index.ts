@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.5
+ * @version 1.0.6
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -74,7 +74,7 @@ async function generateBaseNHash(
     data = '';
   }
 
-  length = normalizeLength(length);
+  length = clamp(length);
   let result = '';
   let n = BigInt(`0x${await sha256(data)}`);
   const base = BigInt(chars.length);
@@ -88,7 +88,7 @@ async function generateBaseNHash(
 }
 
 function generateBaseNRandom(chars: string, length: number): string {
-  length = normalizeLength(length);
+  length = clamp(length);
   let result = '';
   const randoms = crypto.getRandomValues(new Uint8Array(length));
   const base = chars.length;
@@ -100,15 +100,24 @@ function generateBaseNRandom(chars: string, length: number): string {
   return result;
 }
 
-function normalizeLength(length: number): number {
-  if (
-    typeof length !== 'number' ||
-    Number.isNaN(length) ||
-    length < 1 ||
-    length > 64
-  ) {
+// -----------------------------------------------------------------------------
+// Utils
+// -----------------------------------------------------------------------------
+
+function clamp(length: number): number {
+  if (typeof length !== 'number' || Number.isNaN(length)) {
     console.warn('Invalid length. Fallback: 8.');
     return 8;
+  }
+
+  if (length < 1) {
+    console.warn('Invalid length. Fallback: 1.');
+    return 1;
+  }
+
+  if (length > 64) {
+    console.warn('Invalid length. Fallback: 64.');
+    return 64;
   }
 
   return length;
