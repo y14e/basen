@@ -57,7 +57,7 @@ async function generateBaseNHash(
   data: Data,
   length: number,
 ): Promise<string> {
-  if (crypto?.subtle === undefined) {
+  if (crypto.subtle === undefined) {
     console.warn(
       `Available only in secure contexts. Fallback: generateBase${chars.length}Random.`,
     );
