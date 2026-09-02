@@ -5,7 +5,7 @@
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
- * @see {@link https://github.com/y14e/basen-ts}
+ * @see {@link https://github.com/y14e/basen}
  */
 
 // -----------------------------------------------------------------------------
