@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.4
+ * @version 1.0.5
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -58,18 +58,17 @@ async function generateBaseNHash(
   length: number,
 ): Promise<string> {
   if (crypto.subtle === undefined) {
+    const base = chars.length;
     console.warn(
-      `Available only in secure contexts. Fallback: generateBase${chars.length}Random.`,
+      `generateBase${base}Hash is available only in secure contexts. Fallback: generateBase${base}Random.`,
     );
     return generateBaseNRandom(chars, length);
   }
 
   if (
-    !(
-      typeof data === 'string' ||
-      data instanceof ArrayBuffer ||
-      ArrayBuffer.isView(data)
-    )
+    typeof data !== 'string' &&
+    !(data instanceof ArrayBuffer) &&
+    !ArrayBuffer.isView(data)
   ) {
     console.warn('Invalid data. Fallback: empty string.');
     data = '';
