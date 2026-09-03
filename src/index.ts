@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.6
+ * @version 1.0.7
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -21,6 +21,7 @@ type Data = string | ArrayBuffer;
 const BASE36_CHARS = '0123456789abcdefghijklmnopqrstuvwxyz';
 const BASE62_CHARS =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const DEFAULT_LENGTH = 8;
 
 // -----------------------------------------------------------------------------
 // APIs
@@ -28,23 +29,23 @@ const BASE62_CHARS =
 
 export async function generateBase36Hash(
   data: Data = '',
-  length = 8,
+  length = DEFAULT_LENGTH,
 ): Promise<string> {
   return generateBaseNHash(BASE36_CHARS, data, length);
 }
 
-export function generateBase36Random(length = 8): string {
+export function generateBase36Random(length = DEFAULT_LENGTH): string {
   return generateBaseNRandom(BASE36_CHARS, length);
 }
 
 export async function generateBase62Hash(
   data: Data = '',
-  length = 8,
+  length = DEFAULT_LENGTH,
 ): Promise<string> {
   return generateBaseNHash(BASE62_CHARS, data, length);
 }
 
-export function generateBase62Random(length = 8): string {
+export function generateBase62Random(length = DEFAULT_LENGTH): string {
   return generateBaseNRandom(BASE62_CHARS, length);
 }
 
@@ -105,19 +106,21 @@ function generateBaseNRandom(chars: string, length: number): string {
 // -----------------------------------------------------------------------------
 
 function clamp(length: number): number {
+  function fallback(length: number): number {
+    console.warn(`Invalid length. Fallback: ${length}.`);
+    return length;
+  }
+
   if (typeof length !== 'number' || Number.isNaN(length)) {
-    console.warn('Invalid length. Fallback: 8.');
-    return 8;
+    return fallback(DEFAULT_LENGTH);
   }
 
   if (length < 1) {
-    console.warn('Invalid length. Fallback: 1.');
-    return 1;
+    return fallback(1);
   }
 
   if (length > 64) {
-    console.warn('Invalid length. Fallback: 64.');
-    return 64;
+    return fallback(64);
   }
 
   return length;
