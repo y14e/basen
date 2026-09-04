@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.7
+ * @version 1.0.8
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -61,7 +61,7 @@ async function generateBaseNHash(
   if (crypto.subtle === undefined) {
     const base = chars.length;
     console.warn(
-      `generateBase${base}Hash is available only in secure contexts. Fallback: generateBase${base}Random.`,
+      `generateBase${base}Hash() method is available only in secure contexts. Fallback: generateBase${base}Random().`,
     );
     return generateBaseNRandom(chars, length);
   }
