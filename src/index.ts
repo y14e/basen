@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.8
+ * @version 1.0.9
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -127,14 +127,14 @@ function clamp(length: number): number {
 }
 
 async function sha256(data: Data): Promise<string> {
-  return Array.from(
-    new Uint8Array(
+  return [
+    ...new Uint8Array(
       await crypto.subtle.digest(
         'SHA-256',
         typeof data === 'string' ? new TextEncoder().encode(data) : data,
       ),
     ),
-  )
+  ]
     .map((byte) => byte.toString(16).padStart(2, '0'))
     .join('');
 }
