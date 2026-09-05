@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.9
+ * @version 1.0.10
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -18,8 +18,8 @@ type Data = string | ArrayBuffer;
 // Constants
 // -----------------------------------------------------------------------------
 
-const BASE36_CHARS = '0123456789abcdefghijklmnopqrstuvwxyz';
-const BASE62_CHARS =
+const BASE36_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
+const BASE62_ALPHABET =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const DEFAULT_LENGTH = 8;
 
@@ -31,22 +31,22 @@ export async function generateBase36Hash(
   data: Data = '',
   length = DEFAULT_LENGTH,
 ): Promise<string> {
-  return generateBaseNHash(BASE36_CHARS, data, length);
+  return generateBaseNHash(BASE36_ALPHABET, data, length);
 }
 
 export function generateBase36Random(length = DEFAULT_LENGTH): string {
-  return generateBaseNRandom(BASE36_CHARS, length);
+  return generateBaseNRandom(BASE36_ALPHABET, length);
 }
 
 export async function generateBase62Hash(
   data: Data = '',
   length = DEFAULT_LENGTH,
 ): Promise<string> {
-  return generateBaseNHash(BASE62_CHARS, data, length);
+  return generateBaseNHash(BASE62_ALPHABET, data, length);
 }
 
 export function generateBase62Random(length = DEFAULT_LENGTH): string {
-  return generateBaseNRandom(BASE62_CHARS, length);
+  return generateBaseNRandom(BASE62_ALPHABET, length);
 }
 
 // -----------------------------------------------------------------------------
@@ -54,16 +54,16 @@ export function generateBase62Random(length = DEFAULT_LENGTH): string {
 // -----------------------------------------------------------------------------
 
 async function generateBaseNHash(
-  chars: string,
+  alphabet: string,
   data: Data,
   length: number,
 ): Promise<string> {
   if (crypto.subtle === undefined) {
-    const base = chars.length;
+    const base = alphabet.length;
     console.warn(
       `generateBase${base}Hash() method is available only in secure contexts. Fallback: generateBase${base}Random().`,
     );
-    return generateBaseNRandom(chars, length);
+    return generateBaseNRandom(alphabet, length);
   }
 
   if (
@@ -77,25 +77,25 @@ async function generateBaseNHash(
 
   length = clamp(length);
   let result = '';
-  let n = BigInt(`0x${await sha256(data)}`);
-  const base = BigInt(chars.length);
+  let n = BigInt(`0x${await hex(data)}`);
+  const base = BigInt(alphabet.length);
 
   while (result.length < length) {
-    result = chars[Number(n % base)] + result;
+    result = alphabet[Number(n % base)] + result;
     n /= base;
   }
 
   return result;
 }
 
-function generateBaseNRandom(chars: string, length: number): string {
+function generateBaseNRandom(alphabet: string, length: number): string {
   length = clamp(length);
   let result = '';
   const randoms = crypto.getRandomValues(new Uint8Array(length));
-  const base = chars.length;
+  const base = alphabet.length;
 
   for (let i = 0; i < length; i++) {
-    result += chars[(randoms[i] ?? 0) % base];
+    result += alphabet[(randoms[i] ?? 0) % base];
   }
 
   return result;
@@ -126,7 +126,7 @@ function clamp(length: number): number {
   return length;
 }
 
-async function sha256(data: Data): Promise<string> {
+async function hex(data: Data): Promise<string> {
   return [
     ...new Uint8Array(
       await crypto.subtle.digest(
