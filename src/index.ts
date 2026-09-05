@@ -77,7 +77,9 @@ async function generateBaseNHash(
 
   length = clamp(length);
   let result = '';
-  let n = BigInt(`0x${await hex(data)}`);
+  let n = BigInt(
+    `0x${[...new Uint8Array(await crypto.subtle.digest('SHA-256', typeof data === 'string' ? new TextEncoder().encode(data) : data))].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`,
+  );
   const base = BigInt(alphabet.length);
 
   while (result.length < length) {
@@ -124,17 +126,4 @@ function clamp(length: number): number {
   }
 
   return length;
-}
-
-async function hex(data: Data): Promise<string> {
-  return [
-    ...new Uint8Array(
-      await crypto.subtle.digest(
-        'SHA-256',
-        typeof data === 'string' ? new TextEncoder().encode(data) : data,
-      ),
-    ),
-  ]
-    .map((byte) => byte.toString(16).padStart(2, '0'))
-    .join('');
 }
