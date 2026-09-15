@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.11
+ * @version 1.0.12
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -68,6 +68,10 @@ async function generateBaseNHash(
     return generateBaseNRandom(alphabet, length);
   }
 
+  if (!alphabet.length) {
+    throw new Error('Invalid alphabet.');
+  }
+
   if (
     typeof data !== 'string' &&
     !(data instanceof ArrayBuffer) &&
@@ -78,31 +82,26 @@ async function generateBaseNHash(
   }
 
   length = clamp(length);
-  let result = '';
+  const chars: string[] = [];
   let n = BigInt(
-    `0x${[...new Uint8Array(await subtle.digest('SHA-256', typeof data === 'string' ? new TextEncoder().encode(data) : data))].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`,
+    `0x${[...new Uint8Array(await subtle.digest('SHA-512', typeof data === 'string' ? new TextEncoder().encode(data) : data))].map((b) => b.toString(16).padStart(2, '0')).join('')}`,
   );
   const base = BigInt(alphabet.length);
 
-  while (result.length < length) {
-    result = alphabet[Number(n % base)] + result;
+  while (chars.length < length) {
+    chars.unshift(alphabet[Number(n % base)] ?? '');
     n /= base;
   }
 
-  return result;
+  return chars.join('');
 }
 
 function generateBaseNRandom(alphabet: string, length: number): string {
   length = clamp(length);
-  let result = '';
-  const randoms = crypto.getRandomValues(new Uint8Array(length));
   const base = alphabet.length;
-
-  for (let i = 0; i < length; i++) {
-    result += alphabet[(randoms[i] ?? 0) % base];
-  }
-
-  return result;
+  return crypto
+    .getRandomValues(new Uint8Array(length))
+    .reduce((a, b) => a + alphabet[b % base], '');
 }
 
 // -----------------------------------------------------------------------------
