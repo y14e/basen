@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.11
+ * @version 1.0.12
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -66,10 +66,6 @@ async function generateBaseNHash(
       `generateBase${base}Hash() method is available only in secure contexts. Fallback: generateBase${base}Random().`,
     );
     return generateBaseNRandom(alphabet, length);
-  }
-
-  if (!alphabet.length) {
-    throw new Error('Invalid alphabet.');
   }
 
   if (
