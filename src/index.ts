@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.10
+ * @version 1.0.11
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -58,7 +58,9 @@ async function generateBaseNHash(
   data: Data,
   length: number,
 ): Promise<string> {
-  if (crypto.subtle === undefined) {
+  const { subtle } = crypto;
+
+  if (subtle === undefined) {
     const base = alphabet.length;
     console.warn(
       `generateBase${base}Hash() method is available only in secure contexts. Fallback: generateBase${base}Random().`,
@@ -78,7 +80,7 @@ async function generateBaseNHash(
   length = clamp(length);
   let result = '';
   let n = BigInt(
-    `0x${[...new Uint8Array(await crypto.subtle.digest('SHA-256', typeof data === 'string' ? new TextEncoder().encode(data) : data))].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`,
+    `0x${[...new Uint8Array(await subtle.digest('SHA-256', typeof data === 'string' ? new TextEncoder().encode(data) : data))].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`,
   );
   const base = BigInt(alphabet.length);
 
