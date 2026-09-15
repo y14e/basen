@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.12
+ * @version 1.0.11
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
