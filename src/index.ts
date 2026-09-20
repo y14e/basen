@@ -1,7 +1,7 @@
 /**
  * BaseN
  *
- * @version 1.0.12
+ * @version 1.0.13
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -12,7 +12,7 @@
 // Types
 // -----------------------------------------------------------------------------
 
-type Data = string | ArrayBuffer;
+type Data = string | Uint8Array;
 
 // -----------------------------------------------------------------------------
 // Constants
@@ -68,11 +68,7 @@ async function generateBaseNHash(
     return generateBaseNRandom(alphabet, length);
   }
 
-  if (
-    typeof data !== 'string' &&
-    !(data instanceof ArrayBuffer) &&
-    !ArrayBuffer.isView(data)
-  ) {
+  if (typeof data !== 'string' && !(data instanceof Uint8Array)) {
     console.warn('Invalid data. Fallback: empty string.');
     data = '';
   }
@@ -80,7 +76,7 @@ async function generateBaseNHash(
   length = clamp(length);
   const chars: string[] = [];
   let n = BigInt(
-    `0x${[...new Uint8Array(await subtle.digest('SHA-512', typeof data === 'string' ? new TextEncoder().encode(data) : data))].map((b) => b.toString(16).padStart(2, '0')).join('')}`,
+    `0x${[...new Uint8Array(await subtle.digest('SHA-512', typeof data === 'string' ? new TextEncoder().encode(data) : Uint8Array.from(data)))].map((b) => b.toString(16).padStart(2, '0')).join('')}`,
   );
   const base = BigInt(alphabet.length);
 
