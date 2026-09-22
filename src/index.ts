@@ -1,31 +1,9 @@
-/**
- * BaseN
- *
- * @version 1.0.13
- * @author Yusuke Kamiyamane
- * @license MIT
- * @copyright Copyright (c) Yusuke Kamiyamane
- * @see {@link https://github.com/y14e/basen}
- */
-
-// -----------------------------------------------------------------------------
-// Types
-// -----------------------------------------------------------------------------
-
 type Data = string | Uint8Array;
-
-// -----------------------------------------------------------------------------
-// Constants
-// -----------------------------------------------------------------------------
 
 const BASE36_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 const BASE62_ALPHABET =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const DEFAULT_LENGTH = 8;
-
-// -----------------------------------------------------------------------------
-// APIs
-// -----------------------------------------------------------------------------
 
 export async function generateBase36Hash(
   data: Data = '',
@@ -48,10 +26,6 @@ export async function generateBase62Hash(
 export function generateBase62Random(length = DEFAULT_LENGTH): string {
   return generateBaseNRandom(BASE62_ALPHABET, length);
 }
-
-// -----------------------------------------------------------------------------
-// Core
-// -----------------------------------------------------------------------------
 
 async function generateBaseNHash(
   alphabet: string,
@@ -95,10 +69,6 @@ function generateBaseNRandom(alphabet: string, length: number): string {
     .getRandomValues(new Uint8Array(length))
     .reduce((a, b) => a + alphabet[b % base], '');
 }
-
-// -----------------------------------------------------------------------------
-// Utils
-// -----------------------------------------------------------------------------
 
 function clamp(length: number): number {
   function fallback(length: number): number {
