@@ -1,8 +1,7 @@
 type Data = string | Uint8Array;
 
 const BASE36_ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
-const BASE62_ALPHABET =
-  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const BASE62_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const DEFAULT_LENGTH = 8;
 
 export async function generateBase36Hash(
@@ -27,11 +26,7 @@ export function generateBase62Random(length = DEFAULT_LENGTH): string {
   return generateBaseNRandom(BASE62_ALPHABET, length);
 }
 
-async function generateBaseNHash(
-  alphabet: string,
-  data: Data,
-  length: number,
-): Promise<string> {
+async function generateBaseNHash(alphabet: string, data: Data, length: number): Promise<string> {
   const { subtle } = crypto;
 
   if (subtle === undefined) {
